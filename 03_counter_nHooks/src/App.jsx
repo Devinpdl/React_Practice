@@ -83,13 +83,129 @@ function App() {
     };
   }, [counter]); // Run the effect whenever the counter changes
 
-  const addMe = () => {
-    if (counter < 15) {
-      setCounter(counter + 1);
-      console.log('Clicked', counter);
-    }
-  };
+  // const addMe = () => {
+  //   if (counter < 15) {
+  //     setCounter(counter + 1);
+  //     console.log('Clicked', counter);
+  //   }
+  // };
+  //Now, for the Interview perspective, lets we assign setCounter multiple times inside addMe arrow func
+  // const addMe = () => {
+  //   if (counter < 15) {
+  //     setCounter(counter + 1);
+  //     setTimeout(() => setCounter(counter + 1), 3000);
+  //     setInterval(() => setCounter(counter + 1), 5000);
+  //     //Here, what's happening do you note that?
+  //      //Here, what's happening do you note that?
+  //     /*
+  //     The issue you're encountering is related to the closure and asynchronous nature of the addMe function.
+  //     In this code block, when you call setInterval and setTimeout, 
+  //     they capture the current value of counter from the closure. 
+  //     The issue is that when the functions inside setTimeout and setInterval are executed, 
+  //     they are using the old value of counter, not the updated one.
+  //     ------------------------------
+  //     To fix this problem, you should use the functional form of setCounter,
+  //     which receives the current state as an argument and returns the new state. 
+  //     This ensures that you are always working with the latest state value as like below;
+  //     */
+  //     console.log('Clicked', counter);
+  //   }
+  // };
+  // const addMe = () => {
+  //   if (counter < 15) {
+  //     setCounter((prevCounter) => prevCounter + 1);
+  
+  //     setTimeout(() => {
+  //       setCounter((prevCounter) => prevCounter + 1);
+  //     }, 3000);
+  
+  //     setInterval(() => {
+  //       setCounter((prevCounter) => prevCounter + 1);
+  //     }, 5000);
+  
+  //     console.log('Clicked', counter);
+  //   }
+  // };
+  //Here again you can face issues..what issues? The value of counter goes behind 15 right?
+  /*
+  The issue with the counter going beyond 15 and increasing continuously is related to the asynchronous nature 
+  of setTimeout and setInterval functions. When you click the "Add Value" button, 
+  you are scheduling multiple updates to the counter state within a short period of time.
+  Here, 1) The first setCounter updates the state immediately when you click the button.
+2)The setTimeout schedules another state update to occur after 3000 milliseconds (3 seconds).
+3)The setInterval schedules repeated state updates to occur every 5000 milliseconds (5 seconds).
+Since these updates are scheduled asynchronously, they don't wait for the previous ones to finish. As a result, the state updates stack up, and you see the counter increasing rapidly beyond 15.
 
+To fix this, you can clear the interval when the counter reaches a certain value to stop further updates. 
+Here's an example:
+  */
+// const addMe = () => {
+//   if (counter < 15) {
+//     setCounter((prevCounter) => prevCounter + 1);
+
+//     setTimeout(() => {
+//       setCounter((prevCounter) => prevCounter + 1);
+//     }, 3000);
+
+//     const intervalId = setInterval(() => {
+//       setCounter((prevCounter) => prevCounter + 1);
+//     }, 5000);
+
+//     // Clear the interval after a certain time (e.g., 15 seconds)
+//     setTimeout(() => {
+//       clearInterval(intervalId);
+//     }, 15000);
+
+//     console.log('Clicked', counter);
+//   }
+// };
+//Now, This code stops the interval after 15 seconds by calling clearInterval(intervalId).
+
+//Now, for another interview persceptives;.. Let;
+// const addMe = () => {
+//     if (counter < 15) {
+//       setCounter(counter+1);
+//       setCounter(counter+1);
+//       setCounter(counter+1);
+//   //Here after setting counter for the 3 times then there comes an answer will be 10 inside your mind right?
+// //No, Your Answer is wrong.. When you click Add Value button then in one click only one value get updated..
+// /* So, it won't directly update to 10 when you clicked button just for once...
+// It's so because, here the function calls will be sent in batches.
+// So, react will see them as the same operation and perform it only once.
+// So, the counter will increase by only 1 count.
+// Thus, In this code, when the "Add Value" button is clicked, the setCounter function is called three times consecutively, 
+// each time attempting to increment the counter by 1. However, React batches state updates that occur 
+// in the same event loop cycle, treating them as the same operation. As a result, the counter 
+// will increase by only 1 count despite three calls to setCounter.
+// Now, To fix this problem and ensure that the counter increments by 3 with each click, 
+// you can use the functional form of setCounter. 
+// The functional form of setCounter takes the previous state as an argument and returns the updated state. 
+// This ensures that each update is based on the latest state..
+// */
+//       console.log('Clicked', counter);
+//     }
+//   };
+
+const addMe = () => {
+  if (counter < 15) {
+    // Use the functional form of setCounter or passing a callback to setCounter ensures that 
+    //you always get the latest state value, preventing the stale closure problem.
+    //It allows React to correctly apply the updates based on the current state, leading to the expected behavior.
+    /*Here, prevCounter variable is used to access the previous state value of the counter variable.
+    You can even also give prevCounter as any name even as myCounter, oldCounter, getCounter, etc etc.. 
+    This is achieved by using the functional form of the setCounter function, 
+    which takes a callback function as an argument.
+    */
+    setCounter(prevCounter => prevCounter + 1);
+    setCounter(prevCounter => prevCounter + 1);
+    setCounter(prevCounter => prevCounter + 1);
+
+    console.log('Clicked', counter);
+  }
+};
+
+
+  
   const removeMe = () => {
     if (counter > 0) {
       setCounter(counter - 1);
