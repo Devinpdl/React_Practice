@@ -81,7 +81,7 @@ function App() {
     return () => {
       console.log("Component unmounted");
     };
-  }, [counter]); // Run the effect whenever the counter changes
+  }, [counter]); // Run the effect whenever the counter changes(i.e state change in React)
 
   // const addMe = () => {
   //   if (counter < 15) {
