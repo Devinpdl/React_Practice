@@ -4,7 +4,7 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState= [
     {
-        id: 1,
+        id: nanoid(),
         text: "Go to the gym",
         completed: false,
       }
@@ -22,7 +22,10 @@ export const todoSlice =createSlice({
     //And our initial state name is todos so by naming todo we can access todos initial state..
     //Saying this for Todos.jsx where we're using const todos = useSelector((state)=> {state.todos})
     reducers:{
+        //Here, reducers is an object where we put values in key-value-function pairs format.
         addTodo:(state, action)=> {
+            //Inside state we can find updated state value in the store and inside action we can find
+            //action.payload and many more
             //Here, we've to bring our data(todo) into state using payload..
             //So, we are sending our new Todo Item as Payload..
             const newTodo ={
@@ -45,12 +48,26 @@ export const todoSlice =createSlice({
             const todoIdToRemove = action.payload;
             return state.filter(todo => todo.id !== todoIdToRemove);
         },
+        editTodo: (state, action) => {
+            const { id, newText } = action.payload;
+            const todoToEdit = state.find(todo => todo.id === id);
+            if (todoToEdit) {
+              todoToEdit.text = newText;
+            }
+          },
+          updateTodo: (state, action) => {
+            const { id, completed } = action.payload;
+            const todoToUpdate = state.find(todo => todo.id === id);
+            if (todoToUpdate) {
+              todoToUpdate.completed = completed;
+            }
+          },
     }
     //Inside of reducers, it takes property and its corresponding callback function as values.
 });
 //Here, we've exported todoSlice but actually we do export it in another way..
 
-export const {removeTodo, addTodo}= todoSlice.actions;
+export const {removeTodo, editTodo, addTodo, updateTodo }= todoSlice.actions;
 //Here, we've extracted two functions; addTodo and removeTodo from todoSlice.actions..
 //These two functions are now accessible anywhere else in our application where we import this file..
 //Also, we've to export individual reducers like removeTodo or anything you define..
