@@ -69,7 +69,7 @@ export const todoSlice =createSlice({
 
 export const {removeTodo, editTodo, addTodo, updateTodo }= todoSlice.actions;
 //Here, todoSlice.actions means exporting all the actions inside the reducers object above including all addTodo
-//.. removeTodo, editTodo, updateTodo etc..
+//.. removeTodo, editTodo, updateTodo etc...
 //Here, we've extracted two functions; addTodo and removeTodo from todoSlice.actions..
 //These two functions are now accessible anywhere else in our application where we import this file..
 //Also, we've to export individual reducers like removeTodo or anything you define..
