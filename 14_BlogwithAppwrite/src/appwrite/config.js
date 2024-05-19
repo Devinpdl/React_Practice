@@ -1,17 +1,23 @@
 import conf from "../conf/conf";
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
-export class DBService{
+console.log('Appwrite Configuration in config.js:', conf);
+
+export class Service{
     //Let's define variables inside the class to make them accessible for all methods.
-    client = new Client();
-    //Let's define the properties of our database service:
-    databases;
-    bucket;
+    // client = new Client();
+    // //Let's define the properties of our database service:
+    // databases;
+    // bucket;
     //you can say storage or bucket whatever you want..
     //Above all the variables are defined..And Now, when should there must be creation of account?
     //As we know, account should be created when the constructor gets called..right?
-    //So, we do call constructor.. 
+    //So, we do call constructor..
+    client = new Client();
+    databases;
+    bucket;
     constructor(){
+        // this.client = new Client();
         this.client
         .setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteProjectId);
@@ -24,41 +30,54 @@ export class DBService{
      // Here,with an array of title,slug, content, featuredImage, status, userId're the values which we need to insert 
      //into the table posts.
 
-     try {
+    //  try {
 
-        const postcreation  = await this.databases.createDocument(
-            conf.appwriteDatabaseId, // Database Id does comes from appwriteDatabaseId in Appwrite
-            conf.appwriteCollectionId,// Collection id is coming from conf file.
-            slug, //slug is for asking Document's ID for making unique url.
-            //We use slugify npm package to generate slug. At last we need object...
+    //     const postcreation  = await this.databases.createDocument(
+    //         conf.appwriteDatabaseId, // Database Id does comes from appwriteDatabaseId in Appwrite
+    //         conf.appwriteCollectionId,// Collection id is coming from conf file.
+    //         slug, //slug is for asking Document's ID for making unique url.
+    //         //We use slugify npm package to generate slug. At last we need object...
+    //         {
+    //             //We're passing further information as an object..
+    //             title,
+    //             // slug, //We don't need slug to be added as object here..
+    //             content,
+    //             featuredImage,
+    //             status,
+    //             userId,
+
+    //         }
+
+    //     );
+    //     return postcreation;
+        
+    //  }  
+    try {
+        return await this.databases.createDocument(
+            conf.appwriteDatabaseId,
+            conf.appwriteCollectionId,
+            slug,
             {
-                //We're passing further information as an object..
                 title,
-                // slug, //We don't need slug to be added as object here..
                 content,
                 featuredImage,
                 status,
                 userId,
-
             }
-
-        );
-        return postcreation;
-        
-     } catch (error) {
-        console.log("Appwrite service :: createpost :: error", error);
-        
+        )
+    } 
+    catch (error) {
+        console.log("Appwrite service :: createpost :: error", error); 
      }
-
-
-
     }
     //Update method;
     async updatePost(slug, {title,content, featuredImage, status}){
         //Here, we do need DocumentId to update the post so 1st we did take slug as parameter and then
         //.. we passed an object with an array to select and that need to be updated..
+        //slug is nothing but an id of post itself..
         try {
-            const updatedDoc= await this.databases.updateDocument(
+            // const updatedDoc= await this.databases.updateDocument(
+                return await this.databases.updateDocument(
                 //updateDocument is method and it does takes following things;
                 //Database ID,
                 conf.appwriteDatabaseId,
@@ -72,8 +91,8 @@ export class DBService{
                     featuredImage,
                     status,
                 }
-            )
-            return updatedDoc;
+            );
+            // return updatedDoc;
             
         } catch (error) {
             console.log("Appwrite Service :: updatePost :: error", error);
@@ -139,9 +158,10 @@ export class DBService{
         return await this.databases.listDocuments(
             conf.appwriteDatabaseId,
             conf.appwriteCollectionId,
-            [
-                Query.equal("status", "active"),
-            ]
+            // [
+            //     Query.equal("status", "active"),
+            // ]
+            queries,
         )
         
     } catch (error) {
@@ -159,7 +179,7 @@ export class DBService{
                 //createFile is the method and it takes the following values;
                 conf.appwriteBucketId,
                 ID.unique(),
-                file,
+                file
             )
         } catch (error) {
             console.log("Appwrite Service :: uploadFile :: error", error);
@@ -184,7 +204,7 @@ export class DBService{
     }
 
     //Method to Preview the file;
-    async getFilePreview(fileId){
+     getFilePreview(fileId){
         return this.bucket.getFilePreview(
             conf.appwriteBucketId,
             fileId,
@@ -192,9 +212,9 @@ export class DBService{
     }
 }
 
-const dbservice = new DBService();
+const service = new Service();
 
 // export default DBService;
 //Here, Instead of exporting the class itself we are creating an instance of that class and then exporting it. 
 //This way we can use the service as a singleton.
-export default dbservice;
+export default service;
