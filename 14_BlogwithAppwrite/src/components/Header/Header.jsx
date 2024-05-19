@@ -95,7 +95,7 @@ function Header() {
               {/* //We're displaying our components here.. */}
             </li>
             //Here, the logic is if authStatus is true then show Logout Button through components..
-            //else, it'll not show up..
+            //else, it'll not show up...
 
           )}
         </ul>
