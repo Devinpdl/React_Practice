@@ -1,4 +1,5 @@
-import { createSlice, CreateSlice } from "@reduxjs/toolkit";
+//This folder was named authReducer.js later changed to authSlice.js
+import { createSlice } from "@reduxjs/toolkit";
 
 //authSlice do requires InitialState and we do Slice just coz to track the Authentication?
 //Means; to check whetether user is authenticated or not.. by asking with the store.js always.
@@ -8,7 +9,7 @@ const initialState = {
     userData : null, //We're assuming by default status is false and userData is null..
 }
 const authSlice = createSlice({
-    name: 'auth',
+    name: "auth",
     initialState,
     reducers : {
         //Reducers is nothing but objects..
@@ -25,11 +26,15 @@ const authSlice = createSlice({
         //logout does already have access of payload i.e of action so no need to write action using comma , ..
         state.status = false;
         state.userData = null;
-        }
-    }
+        },
+    },
 
-})
+});
 
-export const {} = authSlice.actions;
+export const {login, logout} = authSlice.actions;
 
 export default authSlice.reducer;
+
+// Rename authSlice to authReducer
+// export const authReducer = authSlice.reducer; //.reducer define gareko nei login/ logout functionality
+//export garna laai ho
